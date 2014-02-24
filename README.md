@@ -1,4 +1,4 @@
-Panorama Education Templating Engine
+Templating Engine
 ====================================
 
 A simple templating engine for .panoramatemplate files.
