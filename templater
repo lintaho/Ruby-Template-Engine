@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'json'
+require 'Tokenizer'
+require 'TreeBuilder'
+require 'HTMLRenderer'
+require 'Nodes'
+require 'constants'
+
+# Script
+begin
+	# Basic argument validation. Expected: [foo.panoramatemplate, bar.json, out.html]
+	if(ARGV.length != 3)
+		raise(ArgumentError, "Wrong number of arguments expected: #{ARGV.length} for 3")
+	end
+	
+	a1 = ARGV[0].split('.')[-1]
+	if(a1 != 'panoramatemplate')
+		raise(ArgumentError, "Expected panoramatemplate filetype as first argument, got #{a1}")
+	end
+	
+	a2 = ARGV[1].split('.')[-1]
+	if(a2 != 'json')
+		raise(ArgumentError, "Expected json filetype as second argument, got #{a2}")
+	end
+
+	a3 = ARGV[2].split('.')[-1]
+	if(a3 != 'html')
+		raise(ArgumentError, "Expected html filetype as third argument, got #{a3}")
+	end
+
+	contents = File.read(ARGV[0])
+	jdata = JSON.parse(File.read(ARGV[1]))
+	output_file = File.open(ARGV[2], 'w')
+
+	tokens = Tokenizer.tokenize(contents)
+	syntax_tree = TreeBuilder.build_tree(tokens)
+	output_file.print HTMLRenderer.build_html(syntax_tree, jdata)
+	p "HTML output created in: " + ARGV[2]
+ensure
+	# Clean up after ourselves :) 
+	if(output_file)
+		output_file.close
+	end
+end
