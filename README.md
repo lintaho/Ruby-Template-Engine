@@ -1,4 +1,4 @@
-Templating Engine
+Ruby Templating Engine
 ====================================
 
 A simple templating engine for .panoramatemplate files.
